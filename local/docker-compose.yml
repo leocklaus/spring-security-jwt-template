@@ -9,7 +9,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
+  mail-dev:
+    container_name: mail-dev-bsn
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
 
 volumes:
-  postgres_data:
+  pg_data:
