@@ -96,7 +96,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidCodeException.class)
     public ResponseEntity<?> handleInvalidCodeException(InvalidCodeException ex, WebRequest request){
-        var status = HttpStatus.BAD_REQUEST;
+        var status = HttpStatus.UNAUTHORIZED;
         var exceptionType = ExceptionType.INVALID_CODE_EXCEPTION;
         String detail = ex.getMessage();
         ExceptionModel exceptionModel = exceptionBuilder(status, exceptionType, detail)
@@ -108,7 +108,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserWrongPasswordException.class)
     public ResponseEntity<?> handleWrongPasswordException(UserWrongPasswordException ex, WebRequest request){
-        var status = HttpStatus.NOT_FOUND;
+        var status = HttpStatus.UNAUTHORIZED;
         var exceptionType = ExceptionType.WRONG_PASSWORD;
         String detail = ex.getMessage();
         ExceptionModel exceptionModel = exceptionBuilder(status, exceptionType, detail)
