@@ -12,9 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements IAuthController {
 
     private final UserService userService;
     private final TokenService tokenService;
@@ -26,15 +28,18 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
+    @Override
     @PostMapping("/register")
-    private ResponseEntity<UserOutput> register(@RequestBody @Valid UserInput userInput) {
+    public ResponseEntity<UserOutput> register(@RequestBody @Valid UserInput userInput) {
         UserOutput user = userService.addUser(userInput);
+        URI uri = URI.create("/user/" + user.id());
         return ResponseEntity
                 .ok(user);
     }
 
+    @Override
     @PostMapping("/login")
-    private ResponseEntity<TokenOutput> login(@RequestBody @Valid Login login){
+    public ResponseEntity<TokenOutput> login(@RequestBody @Valid Login login){
         var usernamePassword = new UsernamePasswordAuthenticationToken(login.username(), login.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
@@ -42,14 +47,16 @@ public class AuthController {
         return ResponseEntity.ok(new TokenOutput((token)));
     }
 
+    @Override
     @PostMapping("/changepassword")
-    private ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordInput input){
+    public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordInput input){
         userService.changePassword(input);
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PostMapping("/activate/{code}")
-    private ResponseEntity<Void> changePassword(@PathVariable String code){
+    public ResponseEntity<Void> changePassword(@PathVariable String code){
         userService.enableUser(code);
         return ResponseEntity.noContent().build();
     }
