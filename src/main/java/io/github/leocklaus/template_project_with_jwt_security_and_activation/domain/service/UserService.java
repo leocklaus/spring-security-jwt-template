@@ -75,7 +75,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void sendCodeEmail(CodeType type, User user) {
+    public void sendCodeEmail(CodeType type, User user) {
 
         var code = generateAndSaveCode(type, user);
 
